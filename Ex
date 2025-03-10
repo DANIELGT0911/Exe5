@@ -1,0 +1,108 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Produto {
+    private int codigo;
+    private String nome;
+    private int quantidade;
+
+    public Produto(int codigo, String nome, int quantidade) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.quantidade = quantidade;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    @Override
+    public String toString() {
+        return "Código: " + codigo + ", Nome: " + nome + ", Quantidade: " + quantidade;
+    }
+}
+
+class Estoque {
+    private List<Produto> produtos;
+
+    public Estoque() {
+        this.produtos = new ArrayList<>();
+    }
+
+    public void adicionarProduto(int codigo, String nome, int quantidade) {
+        for (Produto p : produtos) {
+            if (p.getCodigo() == codigo) {
+                System.out.println("Erro: Já existe um produto com esse código.");
+                return;
+            }
+        }
+        produtos.add(new Produto(codigo, nome, quantidade));
+        System.out.println("Produto " + nome + " adicionado com sucesso.");
+    }
+
+    public void removerProduto(int codigo) {
+        for (Produto p : produtos) {
+            if (p.getCodigo() == codigo) {
+                produtos.remove(p);
+                System.out.println("Produto " + p.getNome() + " removido com sucesso.");
+                return;
+            }
+        }
+        System.out.println("Erro: Produto não encontrado.");
+    }
+
+    public Produto buscarPorCodigo(int codigo) {
+        for (Produto p : produtos) {
+            if (p.getCodigo() == codigo) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public List<Produto> buscarPorNome(String nome) {
+        List<Produto> encontrados = new ArrayList<>();
+        for (Produto p : produtos) {
+            if (p.getNome().equalsIgnoreCase(nome)) {
+                encontrados.add(p);
+            }
+        }
+        return encontrados;
+    }
+
+    public void listarProdutos() {
+        if (produtos.isEmpty()) {
+            System.out.println("Estoque vazio.");
+        } else {
+            for (Produto p : produtos) {
+                System.out.println(p);
+            }
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Estoque estoque = new Estoque();
+
+        estoque.adicionarProduto(1, "Teclado", 10);
+        estoque.adicionarProduto(2, "Mouse", 5);
+        estoque.adicionarProduto(3, "Monitor", 3);
+
+        estoque.listarProdutos();
+
+        System.out.println("Busca por código 2: " + estoque.buscarPorCodigo(2));
+        System.out.println("Busca por nome 'Mouse': " + estoque.buscarPorNome("Mouse"));
+
+        estoque.removerProduto(2);
+        estoque.listarProdutos();
+    }
+}
